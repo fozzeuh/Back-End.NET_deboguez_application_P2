@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace P2FixAnAppDotNetCode.Models
 {
@@ -9,7 +11,7 @@ namespace P2FixAnAppDotNetCode.Models
     {
         [BindNever]
         public int IdCommande { get; set; }
-        [BindNever]
+        [ValidateNever]
         public ICollection<LignePanier> Lignes { get; set; }
 
         [Required(ErrorMessage = "ErrorMissingName")]

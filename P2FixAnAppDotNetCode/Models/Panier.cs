@@ -8,6 +8,8 @@ namespace P2FixAnAppDotNetCode.Models
     /// </summary>
     public class Panier : IPanier
     {
+        private List<LignePanier> _panier = new List<LignePanier>();
+
         /// <summary>
         /// Propriété en lecture seule pour affichage seulement
         /// </summary>
@@ -19,7 +21,7 @@ namespace P2FixAnAppDotNetCode.Models
         /// <returns></returns>
         private List<LignePanier> GetListeDesLignesDuPanier()
         {
-            return new List<LignePanier>();
+            return _panier;
         }
 
         /// <summary>
@@ -27,7 +29,16 @@ namespace P2FixAnAppDotNetCode.Models
         /// </summary>//
         public void AjouterElement(Produit produit, int quantite)
         {
-            // TODO implementer la méthode
+            var panier = GetListeDesLignesDuPanier();
+            var ligne = panier.FirstOrDefault(p => p.Produit.Id == produit.Id);
+            if (ligne != null)
+            {
+                ligne.Quantite += quantite;
+            }
+            else
+            {
+                panier.Add(new LignePanier { Quantite = quantite, Produit = produit });
+            }
         }
 
         /// <summary>
@@ -41,8 +52,15 @@ namespace P2FixAnAppDotNetCode.Models
         /// </summary>
         public double GetValeurTotale()
         {
-            // TODO implementer la méthode
-            return 0.0;
+            var lignePaniers = GetListeDesLignesDuPanier();
+            double totale = 0.0;
+
+            foreach (LignePanier lignePanier in lignePaniers)
+            {
+                totale += lignePanier.Produit.Prix * lignePanier.Quantite;
+            }
+
+            return totale;
         }
 
         /// <summary>
@@ -50,8 +68,22 @@ namespace P2FixAnAppDotNetCode.Models
         /// </summary>
         public double GetValeurMoyenne()
         {
-            // TODO implementer la méthode
-            return 0.0;
+            var lignePaniers = GetListeDesLignesDuPanier();
+            if (lignePaniers.Count == 0)
+            {
+                return 0.0;
+            }
+
+            int quantite = 0;
+            double totale = 0.0;
+
+            foreach (var lignePanier in lignePaniers)
+            {
+                quantite += lignePanier.Quantite;
+                totale += lignePanier.Produit.Prix * lignePanier.Quantite;
+            }
+
+            return totale / quantite;
         }
 
         /// <summary>
