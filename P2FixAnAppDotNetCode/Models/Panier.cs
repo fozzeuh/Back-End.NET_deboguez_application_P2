@@ -91,8 +91,33 @@ namespace P2FixAnAppDotNetCode.Models
         /// </summary>
         public Produit TrouveProduitDansLesLignesDuPanier(int idProduit)
         {
-            // TODO implementer la méthode
-            return null;
+            // Version simple détaillé
+            var liste = GetListeDesLignesDuPanier();
+            var lignePanier = liste.FirstOrDefault(lignePanier => lignePanier.Produit.Id == idProduit);
+            if(lignePanier == null)
+            {
+                return null;
+	        }
+            else 
+	        {
+                return lignePanier.Produit;
+	        }
+
+            // Version simple simplifié
+            return GetListeDesLignesDuPanier().FirstOrDefault(lignePanier => lignePanier.Produit.Id == idProduit)?.Produit;
+
+            // Version longue
+            Produit produitTrouve = null;
+            foreach (var lignePanier2 in GetListeDesLignesDuPanier())
+            {
+                if(lignePanier2.Produit.Id == idProduit)
+                {
+                    produitTrouve = lignePanier2.Produit;
+                    break;
+		        }
+            }
+
+            return produitTrouve;
         }
 
         /// <summary>
